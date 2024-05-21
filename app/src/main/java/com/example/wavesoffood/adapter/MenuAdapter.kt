@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -44,41 +43,27 @@ class MenuAdapter(private val menuItemsName: List<FoodInfo>,
                 }
                 // set on click listener to open details
                 val intent = Intent(requireContext, DetailsActivity::class.java)
-                intent.putExtra("MenuItemName", menuItemsName.get(position).foodName)
-                intent.putExtra("MenuItemImage", menuItemsName.get(position).image)
+                intent.putExtra("foodId", menuItemsName[position].id)
+                intent.putExtra("foodName", menuItemsName[position].name)
+                intent.putExtra("foodPrice", menuItemsName[position].price)
+                intent.putExtra("foodImage", menuItemsName[position].imageMenu)
+                intent.putExtra("foodImageDetails", menuItemsName[position].imageDetail)
+                intent.putExtra("foodDescription", menuItemsName[position].description)
+                intent.putExtra("foodIngredient", menuItemsName[position].ingredient)
                 requireContext.startActivity(intent)
             }
         }
 
         fun bind(position: Int) {
             binding.apply {
-                menuFoodName.text = menuItemsName[position].foodName
+                menuFoodName.text = menuItemsName[position].name
                 menuPrice.text = menuItemsName[position].price.toString()
-                Glide.with(menuImage.context).load(menuItemsName[position].image).into(menuImage)
+                Glide.with(menuImage.context).load(menuItemsName[position].imageMenu).into(menuImage)
             }
         }
     }
     interface OnClickListener {
         fun onItemClick(position: Int)
-    }
-
-    fun getBitmapFromURL(src: String?): Bitmap? {
-
-        return try {
-            Log.e("src", src!!)
-            val url = URL(src)
-            val connection = url.openConnection() as HttpURLConnection
-            connection.setDoInput(true)
-            connection.connect()
-            val input = connection.inputStream
-            val myBitmap = BitmapFactory.decodeStream(input)
-            Log.e("Bitmap", "returned")
-            myBitmap
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Log.e("Exception", e.message!!)
-            null
-        }
     }
 }
 

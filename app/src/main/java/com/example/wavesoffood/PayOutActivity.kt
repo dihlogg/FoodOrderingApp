@@ -9,7 +9,7 @@ import com.example.wavesoffood.databinding.ActivityPayOutBinding
 
 class PayOutActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivityPayOutBinding
+    lateinit var binding: ActivityPayOutBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

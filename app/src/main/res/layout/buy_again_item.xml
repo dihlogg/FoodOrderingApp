@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -37,42 +38,58 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/buyAgainFoodName"
+                android:id="@+id/buyAgainStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Food Name"
+                android:text="Completed"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/buyAgainFoodPrice"
+                app:layout_constraintBottom_toTopOf="@+id/buyAgainDateOrder"
                 app:layout_constraintStart_toEndOf="@+id/buyAgainFoodImage"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.5" />
 
             <TextView
-                android:id="@+id/buyAgainFoodPrice"
+                android:id="@+id/buyAgainDateOrder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="35,000đ"
-                android:textSize="20sp"
+                android:text="2024-05-15"
+                android:textSize="18sp"
                 android:textColor="@color/textColor"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/buyAgainFoodName"
-                app:layout_constraintTop_toBottomOf="@+id/buyAgainFoodName" />
+                app:layout_constraintStart_toStartOf="@+id/buyAgainStatus"
+                app:layout_constraintTop_toBottomOf="@+id/buyAgainStatus" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/buyAgainFoodButton"
+                android:id="@+id/moreDetailsButton"
                 android:layout_width="85dp"
                 android:layout_height="40dp"
-                android:layout_marginEnd="32dp"
-                android:text="Buy Again"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/addtocartshape"
+                android:text="More Details"
+                android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintHorizontal_bias="0.813"
+                app:layout_constraintStart_toEndOf="@+id/buyAgainDateOrder" />
+
+            <TextView
+                android:id="@+id/buyAgainTotalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="200000đ"
+                android:textColor="@color/textColor"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/moreDetailsButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.155"
+                app:layout_constraintStart_toStartOf="@+id/moreDetailsButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.727" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

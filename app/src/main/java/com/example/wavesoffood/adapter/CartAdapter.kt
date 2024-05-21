@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.wavesoffood.Models.CartInfo
 import com.example.wavesoffood.Models.FoodInfo
 import com.example.wavesoffood.adapter.CartAdapter.*
 import com.example.wavesoffood.databinding.CartItemBinding
@@ -14,7 +15,7 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
-class CartAdapter (private val cartItems: List<FoodInfo>) : RecyclerView.Adapter<CartViewHolder>() {
+class CartAdapter(private val cartItems: List<FoodInfo>) : RecyclerView.Adapter<CartViewHolder>() {
 
     private var itemQuantities = IntArray(cartItems.size){1}
 
@@ -33,10 +34,9 @@ class CartAdapter (private val cartItems: List<FoodInfo>) : RecyclerView.Adapter
         fun bind(position: Int) {
             binding.apply {
                 val quantity = itemQuantities[position]
-                cartFoodName.text = cartItems[position].foodName
+                cartFoodName.text = cartItems[position].name
                 cartItemPrice.text = cartItems[position].price.toString()
-                Glide.with(cartImage.context).load(cartItems[position].image).into(cartImage)
-                //cartImage.setImageBitmap(image)
+                Glide.with(cartImage.context).load(cartItems[position].imageMenu).into(cartImage)
                 cartItemQuantity.text = quantity.toString()
 
                 minusButton.setOnClickListener {
@@ -69,17 +69,11 @@ class CartAdapter (private val cartItems: List<FoodInfo>) : RecyclerView.Adapter
         }
 
         private fun deleteItem (position : Int) {
-            //cartItems.removeAt(position)
-//            CartItemPrice.removeAt(position)
-//            CartImage.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, cartItems.size)
         }
     }
     private fun addItem(foodName: String, itemPrice: String, imageResId: Int) {
-       // cartItems.add(foodName)
-//        CartItemPrice.add(itemPrice)
-//        CartImage.add(imageResId)
         itemQuantities += 1
         notifyItemInserted(cartItems.size - 1)
     }
