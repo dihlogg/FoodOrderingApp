@@ -38,13 +38,6 @@ class BuyAgainAdapter (
             binding.buyAgainDateOrder.text = cartInfo.dateOrder
             binding.buyAgainTotalPrice.text = cartInfo.totalPrice.toString()
 
-//            binding.moreDetailsButton.setOnClickListener {
-//                val intent = Intent(context, History_Details_Activity::class.java)
-//                intent.putExtra("totalPrice", cartInfo.totalPrice)
-//                intent.putExtra("status", cartInfo.status)
-//                intent.putExtra("dateOrder", cartInfo.dateOrder)
-//                context.startActivity(intent)
-//            }
         }
     }
 }
