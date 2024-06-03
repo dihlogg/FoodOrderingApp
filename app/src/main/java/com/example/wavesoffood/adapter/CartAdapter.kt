@@ -1,23 +1,21 @@
 package com.example.wavesoffood.adapter
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.wavesoffood.Models.CartInfo
 import com.example.wavesoffood.Models.FoodInfo
 import com.example.wavesoffood.adapter.CartAdapter.*
 import com.example.wavesoffood.databinding.CartItemBinding
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
+import com.example.wavesoffood.interfaces.IClickListener
 
-class CartAdapter(private val cartItems: List<FoodInfo>) : RecyclerView.Adapter<CartViewHolder>() {
+class CartAdapter(
+    private val cartItems: List<FoodInfo>,
+    private val listener: IClickListener
+) : RecyclerView.Adapter<CartViewHolder>() {
 
-    private var itemQuantities = IntArray(cartItems.size){1}
+    var totalPrice: Double = cartItems.sumOf { it.newPrice }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
         val binding = CartItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -30,14 +28,14 @@ class CartAdapter(private val cartItems: List<FoodInfo>) : RecyclerView.Adapter<
         holder.bind(position)
     }
 
-    inner class CartViewHolder (private val binding : CartItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CartViewHolder(private val binding: CartItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             binding.apply {
-                val quantity = itemQuantities[position]
                 cartFoodName.text = cartItems[position].name
                 cartItemPrice.text = cartItems[position].price.toString()
                 Glide.with(cartImage.context).load(cartItems[position].imageMenu).into(cartImage)
-                cartItemQuantity.text = quantity.toString()
+                cartItemQuantity.text = cartItems[position].quantity.toString()
 
                 minusButton.setOnClickListener {
                     decreaseQuantity((position))
@@ -47,52 +45,49 @@ class CartAdapter(private val cartItems: List<FoodInfo>) : RecyclerView.Adapter<
                 }
                 deleteButton.setOnClickListener {
                     val itemPosition = adapterPosition
-                    if ( itemPosition != RecyclerView.NO_POSITION) {
+                    if (itemPosition != RecyclerView.NO_POSITION) {
+                        listener.deleteFoodInfoListener(cartItems[itemPosition].id)
                         deleteItem(itemPosition)
+                        listener.onClickListener(cartItems.sumOf { it.newPrice })
                     }
                 }
             }
         }
 
-        private fun increaseQuantity (position : Int) {
-            if (itemQuantities[position] < 10) {
-                itemQuantities[position]++
-                binding.cartItemQuantity.text = itemQuantities[position].toString()
+        private fun increaseQuantity(position: Int) {
+            cartItems[position].quantity++
+            binding.cartItemQuantity.text = cartItems[position].quantity.toString()
+            binding.cartItemPrice.text = cartItems[position].newPrice.toString()
+            listener.onClickListener(cartItems.sumOf { it.newPrice })
+            listener.updateFoodInfoListener(cartItems[position].id, cartItems[position].quantity)
+            calculateTotalPrice()
+        }
+
+        private fun decreaseQuantity(position: Int) {
+            if (cartItems[position].quantity > 1) {
+                cartItems[position].quantity--
+                binding.cartItemQuantity.text = cartItems[position].quantity.toString()
+                binding.cartItemPrice.text = cartItems[position].newPrice.toString()
+                calculateTotalPrice()
+                listener.onClickListener(cartItems.sumOf { it.newPrice })
+                listener.updateFoodInfoListener(
+                    cartItems[position].id,
+                    cartItems[position].quantity
+                )
             }
         }
 
-        private fun decreaseQuantity (position : Int) {
-            if (itemQuantities[position] > 1) {
-                itemQuantities[position]--
-                binding.cartItemQuantity.text = itemQuantities[position].toString()
-            }
-        }
-
-        private fun deleteItem (position : Int) {
+        private fun deleteItem(position: Int) {
+            (cartItems as MutableList).removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, cartItems.size)
+            calculateTotalPrice()
         }
-    }
-    private fun addItem(foodName: String, itemPrice: String, imageResId: Int) {
-        itemQuantities += 1
-        notifyItemInserted(cartItems.size - 1)
     }
 
-    fun getBitmapFromURL(src: String?): Bitmap? {
-        return try {
-            Log.e("src", src!!)
-            val url = URL(src)
-            val connection = url.openConnection() as HttpURLConnection
-            connection.setDoInput(true)
-            connection.connect()
-            val input = connection.inputStream
-            val myBitmap = BitmapFactory.decodeStream(input)
-            Log.e("Bitmap", "returned")
-            myBitmap
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Log.e("Exception", e.message!!)
-            null
-        }
+    private fun calculateTotalPrice() {
+        totalPrice = cartItems.sumOf { it.newPrice }
     }
 }
+
+
