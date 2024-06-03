@@ -49,7 +49,6 @@ class DetailsActivity : AppCompatActivity() {
                 AppDatabase::class.java,
                 "my-database"
             ).allowMainThreadQueries().build()
-            // Example usage
             val FoodInfoDao = appDatabase.FoodInfoDao()
             val newFoodInfo = com.example.wavesoffood.roomdb.entity.FoodInfo(
                 id = foodId!!,
@@ -58,7 +57,9 @@ class DetailsActivity : AppCompatActivity() {
                 imageMenu = foodImage!!,
                 imageDetails = foodImageDetails!!,
                 description = foodDescription!!,
-                ingredient =  foodIngredient!!)
+                ingredient = foodIngredient!!,
+                quantity = 1
+            )
             FoodInfoDao.insertFood(newFoodInfo)
             finish()
         }

@@ -7,5 +7,11 @@ class FoodInfo(
     var imageMenu: String,
     var imageDetail: String,
     var description: String,
-    var ingredient: String) {
+    var ingredient: String,
+    var quantity: Int = 1
+    ) {
+    var newPrice: Double = 0.0
+        get() {
+            return price * quantity
+        }
 }

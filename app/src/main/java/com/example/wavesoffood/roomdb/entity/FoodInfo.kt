@@ -11,7 +11,8 @@ class FoodInfo(@ColumnInfo(name = "id") var id:String,
                @ColumnInfo(name = "imageMenu") var imageMenu:String,
                @ColumnInfo(name = "imageDetails") var imageDetails:String,
                @ColumnInfo(name = "description") var description:String,
-               @ColumnInfo(name = "ingredient") var ingredient:String)
+               @ColumnInfo(name = "ingredient") var ingredient:String,
+               @ColumnInfo(name = "quantity") var quantity:Int)
 {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="idAuto")
