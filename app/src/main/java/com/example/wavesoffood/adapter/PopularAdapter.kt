@@ -1,44 +1,59 @@
 package com.example.wavesoffood.adapter
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.wavesoffood.DetailsActivity
+import com.example.wavesoffood.Models.FoodInfo
 import com.example.wavesoffood.adapter.PopularAdapter.PopularViewHolder
 import com.example.wavesoffood.databinding.PopularItemBinding
 
 class PopularAdapter (
-    private val items : List<String>,
-    private val prices : List<String>,
-    private val images:List<Int>) : RecyclerView.Adapter<PopularViewHolder>() {
+    private val popularItemsName: List<FoodInfo>,
+    private val requireContext : Context
+) : RecyclerView.Adapter<PopularViewHolder>() {
 
-
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): PopularViewHolder {
-        return PopularViewHolder (PopularItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    private val itemClickListener : MenuAdapter.OnClickListener?= null
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularAdapter.PopularViewHolder {
+        val binding = PopularItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return PopularViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: PopularViewHolder, position: Int) {
-        val item = items[position]
-        val price = prices[position]
-        val image = images[position]
-        holder.bind(item,price,image)
+    override fun onBindViewHolder(holder: PopularAdapter.PopularViewHolder, position: Int) {
+        holder.bind(position)
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = popularItemsName.size
 
-    class PopularViewHolder (private val binding : PopularItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        private val imageView = binding.imageView5
 
-        fun bind(item:String, price: String, image: Int) {
-            binding.foodNamePopular.text = item
-            binding.pricePopular.text = price
-            imageView.setImageResource(image)
+    inner class PopularViewHolder(private val binding : PopularItemBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bind(position: Int) {
+            binding.apply {
+                foodNamePopular.text = popularItemsName[position].name
+                pricePopular.text = popularItemsName[position].price.toString()
+                Glide.with(foodImagePopular.context).load(popularItemsName[position].imageMenu).into(foodImagePopular)
+            }
+        }
+        init {
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    itemClickListener?.onItemClick(position)
+                }
+                // set on click listener to open details
+                val intent = Intent(requireContext, DetailsActivity::class.java)
+                intent.putExtra("foodId", popularItemsName[position].id)
+                intent.putExtra("foodName", popularItemsName[position].name)
+                intent.putExtra("foodPrice", popularItemsName[position].price)
+                intent.putExtra("foodImage", popularItemsName[position].imageMenu)
+                intent.putExtra("foodImageDetails", popularItemsName[position].imageDetail)
+                intent.putExtra("foodDescription", popularItemsName[position].description)
+                intent.putExtra("foodIngredient", popularItemsName[position].ingredient)
+                requireContext.startActivity(intent)
+            }
         }
     }
 }

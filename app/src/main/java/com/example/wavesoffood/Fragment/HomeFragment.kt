@@ -1,6 +1,7 @@
 package com.example.wavesoffood.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +12,18 @@ import com.denzcoskun.imageslider.constants.ScaleTypes.*
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.wavesoffood.MenuBottomSheetFragment
+import com.example.wavesoffood.Models.FoodInfo
 import com.example.wavesoffood.R
 import com.example.wavesoffood.adapter.PopularAdapter
 import com.example.wavesoffood.databinding.FragmentHomeBinding
+import com.example.wavesoffood.services.ApiClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeFragment : Fragment() {
-    private lateinit var binding : FragmentHomeBinding
+    private lateinit var binding: FragmentHomeBinding
+    private lateinit var adapter: PopularAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +33,32 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val call = ApiClient.apiService.getPopularFoods()
+        call.enqueue(object : Callback<List<FoodInfo>> {
+            override fun onResponse(
+                call: Call<List<FoodInfo>>,
+                response: Response<List<FoodInfo>>
+            ) {
+                if (response.isSuccessful) {
+                    val foodInfos = response.body()!!
+                    if (response.body() != null) {
+                        adapter = PopularAdapter(foodInfos, requireContext())
+                        binding.PopularRecycleView.layoutManager =
+                            LinearLayoutManager(requireContext())
+                        binding.PopularRecycleView.adapter = adapter
+                    }
+
+                    Log.d("testing", response.message())
+                } else {
+                    Log.d("testing1", response.message() + response.errorBody())
+                }
+            }
+
+            override fun onFailure(call: Call<List<FoodInfo>>, t: Throwable) {
+                Log.d("testing2", t.toString())
+            }
+        })
 
         binding.viewAllMenu.setOnClickListener {
             val bottomSheetFragment = MenuBottomSheetFragment()
@@ -59,16 +90,6 @@ class HomeFragment : Fragment() {
                 Toast.makeText(requireContext(), itemMessage, Toast.LENGTH_SHORT).show()
             }
         })
-        val foodName = listOf("Pasta", "Chicken", "Burger","Pepsi")
-        val Price = listOf("35,000đ", "35,000đ", "33,000đ","12,000đ",)
-        val popularFoodImages = listOf(
-            R.drawable.menufood1,
-            R.drawable.menufood2,
-            R.drawable.menufood3,
-            R.drawable.menufood6,)
-        val adapter = PopularAdapter(foodName,Price,popularFoodImages)
-            binding.PopularRecycleView.layoutManager = LinearLayoutManager(requireContext())
-            binding.PopularRecycleView.adapter = adapter
     }
 
     companion object {

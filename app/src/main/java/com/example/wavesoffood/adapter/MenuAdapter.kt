@@ -2,9 +2,6 @@ package com.example.wavesoffood.adapter
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +9,6 @@ import com.bumptech.glide.Glide
 import com.example.wavesoffood.DetailsActivity
 import com.example.wavesoffood.Models.FoodInfo
 import com.example.wavesoffood.databinding.MenuItemBinding
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 
 
 class MenuAdapter(private val menuItemsName: List<FoodInfo>,
@@ -50,6 +44,7 @@ class MenuAdapter(private val menuItemsName: List<FoodInfo>,
                 intent.putExtra("foodImageDetails", menuItemsName[position].imageDetail)
                 intent.putExtra("foodDescription", menuItemsName[position].description)
                 intent.putExtra("foodIngredient", menuItemsName[position].ingredient)
+                intent.putExtra("foodQuantity", menuItemsName[position].foodQuantity)
                 requireContext.startActivity(intent)
             }
         }
