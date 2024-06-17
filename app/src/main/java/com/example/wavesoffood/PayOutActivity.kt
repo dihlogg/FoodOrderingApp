@@ -1,5 +1,6 @@
 package com.example.wavesoffood
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,7 +15,6 @@ import com.example.wavesoffood.databinding.ActivityPayOutBinding
 import com.example.wavesoffood.roomdb.dao.FoodInfoDao
 import com.example.wavesoffood.roomdb.database.AppDatabase
 import com.example.wavesoffood.services.ApiClient
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,7 +25,6 @@ class PayOutActivity : AppCompatActivity() {
     lateinit var binding: ActivityPayOutBinding
     private var totalPrice: Double = 0.0
 
-    //private lateinit var cartInfo : CartInfo
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +37,12 @@ class PayOutActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityPayOutBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         val totalPriceTextView = binding.PayOutTotalPrice
+
         totalPrice = intent.getDoubleExtra("totalPrice", 0.0)
         totalPriceTextView.text = totalPrice.toString()
+
         binding.PlaceMyOrderButton.setOnClickListener {
             val bottomSheetDialog = CongratsBottomSheetFragment()
             bottomSheetDialog.show(supportFragmentManager, "Order")
@@ -50,6 +52,9 @@ class PayOutActivity : AppCompatActivity() {
         binding.imageButtonBack.setOnClickListener {
             finish()
         }
+        binding.editTextName.setText(LoginActivity.UserInfo?.userFullName)
+        binding.editTextAddress.setText(LoginActivity.UserInfo?.userAddress)
+        binding.editTextPhone.setText(LoginActivity.UserInfo?.userPhone)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -57,6 +62,7 @@ class PayOutActivity : AppCompatActivity() {
         val cartInfoRequest = CartInfoRequestDto()
         cartInfoRequest.dateOrder = DateTimeCommonFunction.getDateTimeCurrent()
         cartInfoRequest.cartDetailDtos = getFoodInfoFromRoom()
+        cartInfoRequest.userId = LoginActivity.UserInfo?.id!!
         val call = ApiClient.apiService.postCartDetailInfo(cartInfoRequest)
         call.enqueue(object : Callback<Boolean?> {
             override fun onResponse(
@@ -65,8 +71,8 @@ class PayOutActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     Log.d("postcart", response.message())
-                    // Clear data DB
-                    _foodInfoDao.clearAllFoodInfos()
+                    // clear data DB
+                    _foodInfoDao.clearAllFoodInfos(LoginActivity.UserInfo?.id!!)
                 } else {
                     Log.d(
                         "postcart1",
@@ -82,7 +88,12 @@ class PayOutActivity : AppCompatActivity() {
     }
 
     private fun getFoodInfoFromRoom(): MutableList<CartDetailRequestDtos> {
-        val foodInfodas = _foodInfoDao.getFoodInfos()
+        var userId = LoginActivity.UserInfo?.id
+        if (userId == null){
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+        val foodInfodas = _foodInfoDao.getFoodInfos(userId!!)
         val foodInfoModels = mutableListOf<CartDetailRequestDtos>()
         for (foodInfo in foodInfodas.reversed()) {
             val cartInfoRequestDto = CartDetailRequestDtos(

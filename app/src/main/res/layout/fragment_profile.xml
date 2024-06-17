@@ -27,20 +27,22 @@
 
         <TextView
             android:id="@+id/textViewName"
-            android:layout_width="40dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/black"
             android:textStyle="italic"
             android:text="Name" />
 
-        <EditText
+        <TextView
             android:id="@+id/editTextName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textSize="20sp"
+            android:textColor="@color/black"
             android:background="@android:color/transparent"
             android:ems="10"
             android:inputType="textPersonName"
@@ -60,20 +62,22 @@
 
         <TextView
             android:id="@+id/textViewAddress"
-            android:layout_width="40dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:text="Address"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/black"
             android:textStyle="italic"/>
 
-        <EditText
+        <TextView
             android:id="@+id/editTextAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textSize="20sp"
+            android:textColor="@color/black"
             android:background="@android:color/transparent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
@@ -94,25 +98,60 @@
 
         <TextView
             android:id="@+id/textViewEmail"
-            android:layout_width="40dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:text="Email"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/black"
             android:textStyle="italic"/>
 
-        <EditText
+        <TextView
             android:id="@+id/editTextEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textSize="20sp"
+            android:textColor="@color/black"
             android:background="@android:color/transparent"
             android:ems="10"
             android:inputType="textEmailAddress"
             android:text="long123@gmail.com" />
     </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/profileedittextshape"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:elevation="3dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp">
+
+            <TextView
+                android:id="@+id/textViewPassword"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="Password"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/editTextPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:text="long123@gmail.com" />
+        </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -127,20 +166,22 @@
 
         <TextView
             android:id="@+id/textViewPhone"
-            android:layout_width="40dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:text="Phone"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/black"
             android:textStyle="italic"/>
 
-        <EditText
+        <TextView
             android:id="@+id/editTextPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textSize="20sp"
+            android:textColor="@color/black"
             android:background="@android:color/transparent"
             android:ems="10"
             android:inputType="phone"
@@ -150,12 +191,12 @@
     </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button5"
+            android:id="@+id/logOutButton"
             android:background="@drawable/proceedbuttonshape"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="bottom"
-            android:text="Save Information"
+            android:text="Log Out"
             android:textColor="@color/textColor"
             android:textSize="20sp"
             android:layout_marginStart="16dp"

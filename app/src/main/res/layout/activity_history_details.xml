@@ -11,6 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageButton
+            android:id="@+id/imageButtonBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:background="@android:color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/arrow_left"
+            android:text="Button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/textView15"
             android:layout_width="wrap_content"
@@ -21,7 +34,7 @@
             android:layout_marginTop="46dp"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/imageButtonBack" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
@@ -53,31 +66,31 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView18"
+                    android:id="@+id/textViewStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="Completed"
                     android:textColor="@color/black"
                     android:textSize="16dp"
-                    app:layout_constraintBottom_toTopOf="@+id/textView19"
+                    app:layout_constraintBottom_toTopOf="@+id/textViewDateOrder"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.5" />
 
                 <TextView
-                    android:id="@+id/textView19"
+                    android:id="@+id/textViewDateOrder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2024-05-15"
                     android:textSize="20sp"
                     android:textColor="@color/textColor"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/textView18"
-                    app:layout_constraintTop_toBottomOf="@+id/textView18" />
+                    app:layout_constraintStart_toStartOf="@+id/textViewStatus"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewStatus" />
 
                 <TextView
-                    android:id="@+id/textView21"
+                    android:id="@+id/textViewTotalPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="200000"
@@ -86,7 +99,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.923"
-                    app:layout_constraintStart_toStartOf="@+id/textView18"
+                    app:layout_constraintStart_toStartOf="@+id/textViewStatus"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.506" />
 
@@ -107,7 +120,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/historyRecyclerView"
+            android:id="@+id/historyDetailsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
@@ -116,8 +129,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewRecentBuy"
-            app:layout_constraintVertical_bias="0.0"
-            tools:listitem="@layout/history_item" />
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

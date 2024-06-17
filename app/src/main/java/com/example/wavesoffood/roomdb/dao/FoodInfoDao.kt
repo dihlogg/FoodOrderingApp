@@ -5,25 +5,25 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.wavesoffood.roomdb.entity.FoodInfo
+import com.example.wavesoffood.roomdb.entity.FoodInfoRoom
 
 @Dao
 interface FoodInfoDao {
-    @Query("select * from FoodInfos")
-    fun getFoodInfos():List<FoodInfo>
+    @Query("select * from FoodInfoRooms where userId = :userId")
+    fun getFoodInfos(userId: String):List<FoodInfoRoom>
 
-    @Query("select * from FoodInfos where id = :itemId")
-    fun getFoodInfo(itemId: String):FoodInfo
+    @Query("select * from FoodInfoRooms where id = :itemId and userId = :userId LIMIT 1")
+    fun getFoodInfo(itemId: String, userId: String):FoodInfoRoom
 
     @Insert
-    fun insertFood(foodInfo: FoodInfo)
+    fun insertFood(foodInfo: FoodInfoRoom)
 
     @Update
-    fun updateFood(foodInfo: FoodInfo)
+    fun updateFood(foodInfo: FoodInfoRoom)
 
     @Delete
-    fun deleteFood(foodInfo: FoodInfo)
+    fun deleteFood(foodInfo: FoodInfoRoom)
 
-    @Query("DELETE FROM FoodInfos")
-    fun clearAllFoodInfos()
+    @Query("DELETE FROM FoodInfoRooms where userId = :userId")
+    fun clearAllFoodInfos(userId: String)
 }

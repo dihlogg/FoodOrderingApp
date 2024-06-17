@@ -2,12 +2,14 @@ package com.example.wavesoffood.Fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
+import com.example.wavesoffood.LoginActivity
 import com.example.wavesoffood.Models.FoodInfo
 import com.example.wavesoffood.PayOutActivity
 import com.example.wavesoffood.adapter.CartAdapter
@@ -31,7 +33,13 @@ class CartFragment : Fragment(), IClickListener {
             "my-database"
         ).allowMainThreadQueries().build()
         _foodInfoDao = appDatabase.FoodInfoDao()
-        val foodInfodas = _foodInfoDao.getFoodInfos()
+        var userId = LoginActivity.UserInfo?.id
+        if (userId == null){
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+        }
+        Log.d("UserId", userId!!)
+        val foodInfodas = _foodInfoDao.getFoodInfos(userId)
         val foodInfoModels = mutableListOf<FoodInfo>()
         for (foodInfo in foodInfodas.reversed()) {
             val foodInfoModel = FoodInfo(
@@ -42,11 +50,12 @@ class CartFragment : Fragment(), IClickListener {
                 foodInfo.imageDetails,
                 foodInfo.description,
                 foodInfo.ingredient,
-                foodInfo.quantity
+                foodInfo.quantity,
+                foodInfo.foodQuantity
             )
             foodInfoModels.add(foodInfoModel)
         }
-        val adapter = CartAdapter(foodInfoModels, this)
+        val adapter = CartAdapter(foodInfoModels, this, requireContext())
         binding.cartRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.cartRecyclerView.adapter = adapter
 
@@ -67,13 +76,13 @@ class CartFragment : Fragment(), IClickListener {
     }
 
     override fun updateFoodInfoListener(id: String, quantity: Int) {
-        val itemUpdate = _foodInfoDao.getFoodInfo(id);
+        val itemUpdate = _foodInfoDao.getFoodInfo(id, LoginActivity.UserInfo?.id!!);
         itemUpdate.quantity = quantity
         _foodInfoDao.updateFood(itemUpdate);
     }
 
     override fun deleteFoodInfoListener(id: String) {
-        val itemDelete = _foodInfoDao.getFoodInfo(id);
+        val itemDelete = _foodInfoDao.getFoodInfo(id, LoginActivity.UserInfo?.id!!);
         _foodInfoDao.deleteFood(itemDelete);
     }
 }

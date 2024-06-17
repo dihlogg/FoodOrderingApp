@@ -7,11 +7,12 @@ import java.time.format.DateTimeFormatter
 
 
 class CartInfo(
+    var id: String,
     var status: String,
     var dateOrder: String,
     var totalPrice: Double
 ) {
-    lateinit var cartDetail: MutableList<CartDetailInfo>
+    lateinit var cartDetails: MutableList<CartDetailInfo>
 }
 
 class CartDetailInfo(
@@ -25,7 +26,7 @@ class CartDetailInfo(
 class CartInfoRequestDto() {
     var status = "NewOrder"
     var dateOrder: String = ""
-    var userId = "c52d998c-7e24-4fea-93f1-7662ffeb8d42"
+    var userId : String =""
     lateinit var cartDetailDtos: MutableList<CartDetailRequestDtos>
 }
 

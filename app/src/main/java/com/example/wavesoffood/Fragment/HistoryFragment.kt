@@ -1,5 +1,6 @@
 package com.example.wavesoffood.Fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,11 +8,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.wavesoffood.History_Details_Activity
+import com.example.wavesoffood.LoginActivity
 import com.example.wavesoffood.Models.CartInfo
-import com.example.wavesoffood.R
 import com.example.wavesoffood.adapter.BuyAgainAdapter
 import com.example.wavesoffood.databinding.FragmentHistoryBinding
 import com.example.wavesoffood.services.ApiClient
@@ -22,19 +21,25 @@ import retrofit2.Response
 class HistoryFragment : Fragment() {
 
     private lateinit var binding: FragmentHistoryBinding
-    private lateinit var adapter: BuyAgainAdapter
+    private lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        context = requireContext()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
-        val call = ApiClient.apiService.GetTransactions()
+        val userId = LoginActivity.UserInfo?.id
+        if (userId == null){
+            // quay ve trang login
+            val intent = Intent(getContext(), LoginActivity::class.java)
+            startActivity(intent)
+        }
+        val call = ApiClient.apiService.GetTransactions(userId!!)
         call.enqueue(object : Callback<List<CartInfo>> {
             override fun onResponse(
                 call: Call<List<CartInfo>>,
@@ -43,7 +48,7 @@ class HistoryFragment : Fragment() {
                 if (response.isSuccessful) {
                     var foodInfos = response.body()!!
                     if (response.body() != null) {
-                        val adapter = BuyAgainAdapter(response.body()!!)
+                        val adapter = BuyAgainAdapter(response.body()!!, requireContext())
                         binding.historyRecyclerView.layoutManager =
                             LinearLayoutManager(requireContext())
                         binding.historyRecyclerView.adapter = adapter

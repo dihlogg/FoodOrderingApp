@@ -10,7 +10,7 @@
         android:layout_width="342dp"
         android:layout_height="94dp"
         app:cardCornerRadius="22dp"
-        android:elevation="5dp"
+        android:elevation="10dp"
         android:layout_marginTop="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/foodImagePopular"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginStart="8dp"
@@ -39,9 +39,9 @@
                 android:textSize="14sp"
                 android:text="Food Name"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-                app:layout_constraintStart_toEndOf="@+id/imageView5"
-                app:layout_constraintTop_toTopOf="@+id/imageView5" />
+                app:layout_constraintBottom_toBottomOf="@+id/foodImagePopular"
+                app:layout_constraintStart_toEndOf="@+id/foodImagePopular"
+                app:layout_constraintTop_toTopOf="@+id/foodImagePopular" />
 
             <TextView
                 android:id="@+id/pricePopular"
@@ -54,7 +54,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.652"
                 app:layout_constraintStart_toEndOf="@+id/foodNamePopular"
-                app:layout_constraintTop_toTopOf="@+id/imageView5" />
+                app:layout_constraintTop_toTopOf="@+id/foodImagePopular" />
 
             <TextView
                 android:id="@+id/addToCartPopular"

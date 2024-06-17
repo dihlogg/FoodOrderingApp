@@ -1,6 +1,10 @@
 package com.example.wavesoffood.adapter
 
 
+import android.app.AlertDialog
+import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,8 +15,9 @@ import com.example.wavesoffood.databinding.CartItemBinding
 import com.example.wavesoffood.interfaces.IClickListener
 
 class CartAdapter(
-    private val cartItems: List<FoodInfo>,
-    private val listener: IClickListener
+    private val cartItems: MutableList<FoodInfo>,
+    private val listener: IClickListener,
+    private val context: Context
 ) : RecyclerView.Adapter<CartViewHolder>() {
 
     var totalPrice: Double = cartItems.sumOf { it.newPrice }
@@ -33,9 +38,10 @@ class CartAdapter(
         fun bind(position: Int) {
             binding.apply {
                 cartFoodName.text = cartItems[position].name
-                cartItemPrice.text = cartItems[position].price.toString()
+                cartItemPrice.text = cartItems[position].newPrice.toString()
                 Glide.with(cartImage.context).load(cartItems[position].imageMenu).into(cartImage)
-                cartItemQuantity.text = cartItems[position].quantity.toString()
+                binding.cartItemQuantity.setText(cartItems[position].quantity.toString())
+                cartFoodQuantity.text = cartItems[position].foodQuantity
 
                 minusButton.setOnClickListener {
                     decreaseQuantity((position))
@@ -43,6 +49,16 @@ class CartAdapter(
                 plusButton.setOnClickListener {
                     increaseQuantity((position))
                 }
+                cartItemQuantity.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                        // This will be triggered when text is changed
+                        onTextChanged(position, s)
+                    }
+
+                    override fun afterTextChanged(s: Editable?) {}
+                })
                 deleteButton.setOnClickListener {
                     val itemPosition = adapterPosition
                     if (itemPosition != RecyclerView.NO_POSITION) {
@@ -56,17 +72,39 @@ class CartAdapter(
 
         private fun increaseQuantity(position: Int) {
             cartItems[position].quantity++
-            binding.cartItemQuantity.text = cartItems[position].quantity.toString()
+            binding.cartItemQuantity.setText(cartItems[position].quantity.toString())
             binding.cartItemPrice.text = cartItems[position].newPrice.toString()
             listener.onClickListener(cartItems.sumOf { it.newPrice })
             listener.updateFoodInfoListener(cartItems[position].id, cartItems[position].quantity)
             calculateTotalPrice()
         }
+        private fun onTextChanged(position: Int, newText: CharSequence?) {
+            val newQuantity = newText?.toString()?.toIntOrNull() ?: 0
+            val maxQuantity = cartItems[position].foodQuantity.toIntOrNull() ?: 0
+            if (newQuantity > maxQuantity) {
+                showMaxQuantityDialog()
+                binding.cartItemQuantity.setText(maxQuantity.toString())
+            } else if (newQuantity != cartItems[position].quantity) {
+                cartItems[position].quantity = newQuantity
+                binding.cartItemPrice.text = cartItems[position].newPrice.toString()
+                listener.updateFoodInfoListener(cartItems[position].id, newQuantity)
+                listener.onClickListener(cartItems.sumOf { it.newPrice })
+                calculateTotalPrice()
+            }
+        }
+        private fun showMaxQuantityDialog() {
+            AlertDialog.Builder(context)
+                .setTitle("Quantity Exceeded")
+                .setMessage("The quantity cannot exceed the available.")
+                .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
+        }
 
         private fun decreaseQuantity(position: Int) {
             if (cartItems[position].quantity > 1) {
                 cartItems[position].quantity--
-                binding.cartItemQuantity.text = cartItems[position].quantity.toString()
+                binding.cartItemQuantity.setText(cartItems[position].quantity.toString())
                 binding.cartItemPrice.text = cartItems[position].newPrice.toString()
                 calculateTotalPrice()
                 listener.onClickListener(cartItems.sumOf { it.newPrice })
